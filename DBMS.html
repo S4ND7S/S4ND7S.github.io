@@ -126,7 +126,7 @@
 		}
 
 		.button {
-			background: #697ec4;
+			background: #faff84;
 			border-radius: 3px;
 			border: 0;
 			color: #fff;
@@ -206,7 +206,7 @@
 				var url = $("#url").val(); var content = $("#content").val(); $.post(url, { "content": content }, function () {
 					document.getElementById('wb-text').innerHTML = "Sent!";
 					document.getElementById("form").style.display = "none";
-					setTimeout(() => document.location.reload(), 5000);
+					setTimeout(() => document.location.reload(), 2000);
 				});
 			});
 		}); </script>
