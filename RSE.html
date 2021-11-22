@@ -43,9 +43,28 @@ body {
   padding: 14px 20px; /* Add some padding */
   text-decoration: none; /* Remove underline */
 }
+  
+  
 
-
-
+.download a {
+  float: Left; /* Make sure that the links stay side-by-side */
+  display: block; /* Change the display to block, for responsive reasons (see below) */
+  color: white; /* White text color */
+  text-align: center; /* Center the text */
+  padding: 14px 20px; /* Add some padding */
+  text-decoration: none; /* Remove underline */
+}
+.download {
+  overflow: hidden; /* Hide overflow */
+  background-color: #333; /* Dark background color */
+}
+  .navbar a:hover {
+  background-color: #ddd; /* Grey background color */
+  color: black; /* Black text color */
+}
+  
+  
+  
 /* Change color on hover/mouse-over */
 .navbar a:hover {
   background-color: #ddd; /* Grey background color */
@@ -87,7 +106,6 @@ body {
   <a href="https://example.com">Lunar</a>
   <a href="https://example.com">Sandy</a>
   <a href="https://example.com">Sandy-v2</a>
-  
   </div>
   
 </body>
