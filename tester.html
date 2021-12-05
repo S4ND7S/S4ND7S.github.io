@@ -1,246 +1,144 @@
 
-<!doctype html><html lang="en"><head><meta content="text/html;charset=utf-8" http-equiv="Content-Type"><meta content="utf-8" http-equiv="encoding"><script>if ("production" !== "production") {
-        console.log(
-          `%cFrontend loaded and parsing started: - ${new Date()
-            .toString()
-            .slice(16, 24)}:${new Date().getMilliseconds()}`,
-          `color: green;font-weight:bold;`
-        );
-      }
-      const fbClickId = new URL(window.location.href).searchParams.get("fbclid");
-      if (fbClickId) {
-        const now = new Date();
-        now.setDate(now.getDate() + 1);
-        document.cookie = `fbClickId=${fbClickId}; expires=${now.toUTCString()};path=/`;
-      }
-      let language =
-        (navigator.languages && navigator.languages[0]) || navigator.language;
-      if (language == null || language === "") {
-        language = "en";
-      } else if (language.indexOf("-" !== -1)) {
-        language = language.split("-")[0];
-      }
-      window.language = language;
-      function getUtms() {
-        const url = new URL(window.location.href);
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Node Unblocker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- header font -->
+  <link href="//fonts.googleapis.com/css?family=Orbitron" rel="stylesheet" type="text/css">
+  
+  <!-- body font -->
+  <link href="//fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet" type="text/css">
+  
+  <style type="text/css">
+  
+    /* fonts */
+    body { font-family: 'Droid Sans', arial, serif;  letter-spacing: 1px;}
+    h1 { font-family: 'Orbitron', arial, serif; letter-spacing: 2px;}
+    h2, h3, h4, h5, h6 { letter-spacing: 2px; font-weight: normal;}
+  
+    /* colors */
+    body { background-color: #000306; color: white;}
+    .container { background-color: #3F4038; border-color: #5B3E38}
+    a { color: #62BECB; }
+    a:hover {color: #82DEEB }
 
-        const dlParam = url.searchParams.get("dl");
-        if(dlParam) {
-          sessionStorage.setItem("dl", dlParam);
+	#error {  border:1px dotted white; background: brown; }
+    
+    /* stripes and borders */
+    
+    .main { background-repeat: repeat-x;  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAB9CAIAAADbWVFQAAADd0lEQVR4nO3d6VbbMBiE4Tcm3Tf2tRfSf+393wd03/dCk/6AgjF2otiSvpGsuYBY52HO4JPEMHn+4hl6eTqzPkFbptYHaMnRjLn1GW7muKKyPkMzR5KdOq4AMSxlKaSwxKXQ2axDyZ06ud4liWYdSnbq5IaNPVYqUphjJSSF7WYdSO7Uy+7+mDXrQLJTC6SwwkpRChOsRKWIj5WuFJEHfl9y0V85FyZes/YlO+UuRTSsDKSIg5WHFBE2a09yp173KknYZu1JdqqfFEGxMpMiHFZ+UgTCylKKEAO/K7nob3y0wnOzdiU75UUKv1h5S+ERK3spfG3WjuROvfX928vD6+1Idsq7FMOxxiPFQKxRSTEEa2xS9B74bclFfxf4Dac+L78t2anQUvTAGq0Uq2KNWYqVNmtLcqfeR/wwz/VSW5KdiimFI1aROs/yCxapyyy5ZpGqZ9HAb0ou+ge77991XnlTslOGUnRhFanWtFy/SHWluVkbkjv1UUCKRrM2JDslIkUdq0gtzcVZipRLKoqUc6brkov+SU8K88dRWqMptT7Tw5KVQq1ZylLAVGewPktKPaltusoBZaXqkThjElIoYKUihTlWQlLYDvwXSanH3XfpZueVlVoQmyOnKIUJVqJSwHQ+CX+QWr7GvZxjHs1xcYj6U5aVckw8rNSliIaVgRRx7rO+SUo9nK/8rmfwZslK9UhYrJykCIqVmRThsPKTItDAf5eUerD6ojfiv1myUsPjGStjKfxi5S2Fx836ISl1f/BO1eOnWbJSfuMBayRSDMcajxQDsUYlxZCB/ykpdc/rojfSs1myUkHTB2ucUvTAGq0Uq27WL0mpuyF3qp4VmiUrFS2uWEUKR6widZ7lWEXqMksG/rek1J1Yi97IombJSlmlE6tI3Uw7VpFqTctm/ZGUum20U/U0myUrpZBrWEVqca6witTSXGAVKZdM53AqKXVLYNEbqWSlBKP4NWtNqdOJHpasFDr/OfM8U72dAs7+L5VQs4Qeqq3lrLbpKlj6UohgJSGFAlYqUpgP/Jrkov/tuPe0bNaaoFO3FIZYyUlhhZWiFCabVUnu1Ezt4UygEnRykyIyVtJSxMRKXYpoWBlIEWfgJ5KL3uPPDgRv1kTQqZcUobFykiIoVmZSBNwsyZ1i2KczYZql6DRUiiBYmUrhHytfKeAfdPYd7TpexlgAAAAASUVORK5CYII=); }
+    .footer { min-height: 60px; background-repeat: repeat-x; background-position: bottom left; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAA8CAIAAAAfXYiZAAAB+ElEQVR4nO3b11aDQBSF4T2IXWM3lhfxTt//PWKvsTfwIllLEobQZuZsYM4DyFkffyKBRJ2encBPsQmlF9BNHEtvoBul+LBiAEp6idQogK0sRdlUrMYnjwhLUTYVJzZiwQoom4rUxMmjwAoom4pSG8ljzTEmhV/duQucrzExDZKCbFkhpdRP9vuBWFmNk4JUWfOUUt95/2MEymqoFNyXtUAp9VXsusVpWY2WgsuyFimlPstcCzsqqwVScIPVDik4eBkuUUp9VPokaresNknBalnLlFLvNe5u2CqrfVKwVNYKpdRb7Ttm5stqqxSMl7VKKfVq6C6sybLaLQWDZa1RSr0YvbNvpqwuSMFIWeuUUs8WnhbVLas7UqhZVo9SamjtCWR1rF5kcA1jM7T5Ybfi3+6gFKqVtUEp9WT/1lzpI3RWCmXL2qSUenT11KXEcTouheJlbVFKPbh9RlzoaF5qNPllbVNK3Ut8oyXnmF4qObPK2qGUupP7/l3mkb1UevRl7VJK3Qp/p1NXlpfKmumy9iilbgikMFWWl5o9/4t4qdwZvwz3KaWumaQwKstLFZywTyl1xScF8Z+jaIdTqh8hZPsx1iWl1EEEsJXFLAUwlXVBKXWYeE9nWZBfCiRlnVNKHaWuE+TXbIoUxMsaUEodZ1x7Si7bLCkAf1M7eHbSdYGuAAAAAElFTkSuQmCC); }
+    .container { border-style: solid; border-width: 1px; border-radius: 10px;  -moz-border-radius: 10px;  -webkit-border-radius: 10px;  overflow:hidden;  /* otherwise the background image appears on top of the curved border */ }
+    
+    
+    /* layout */
+    body { text-align: center; }
+    .container { width: 760px; margin: 40px auto; text-align: left;  max-width: calc(100% - 10px);}
+    
+    h2, h3, h4, h5, h6 { margin-bottom: 0;  }
+    ul { line-height: 150%; }
+    ul, p {  margin-top: 5px; margin-bottom: 0; }
+    .main, .footer { padding: 1px 10px 0 10px; }
+    
+    #error {display: none; padding: 5px 10px; margin: 30px 10px; }
+    
+    form ul { list-style-type: none; padding-left: 25px;}
+    input[type=text] { width: 640px; max-width: calc(100% - 8em) }
+    
+    .footer { position: relative; clear: both;}
+    .footer p { margin:0; position: absolute; bottom: 10px;  right: 10px; padding-left: 10px; }
+    
+    #google-ad {
+        text-align: center;
+        margin: 10px auto;
+    }
+    @media(min-width: 768px) {
+        #google-ad {
+            margin: 0;
+            float:right; 
+            margin:4px 2px 2px 20px;
         }
+    }
+  </style>
+</head>
+<body>
 
-        if (url.searchParams.get("utm_medium") || url.searchParams.get("utm_source") || url.searchParams.get("utm_campaign")) {
-          const utm_medium = url.searchParams.get("utm_medium") || "NA";
-          const utm_source = url.searchParams.get("utm_source") || "NA";
-          const utm_campaign = url.searchParams.get("utm_campaign") || "NA";
-          sessionStorage.setItem("utm_medium", utm_medium);
-          sessionStorage.setItem("utm_source", utm_source);
-          sessionStorage.setItem("utm_campaign", utm_campaign);
-          const referrer = document.referrer ? document.referrer.split("/")[2] : "NA";
-          const expiry = new Date();
-          expiry.setHours(expiry.getHours() + 24);
-          const domain =
-            window.location.hostname === "localhost"
-              ? "localhost"
-              : window.location.hostname;
+  <div class="container">
+  
+    <div class="main">
+  
+      <h1>Node Unblocker</h1>
+      
+      <div id="error"></div>
 
-          document.cookie = `${"utm_medium" +
-            "="}${utm_medium};expires=${expiry};domain=${domain};path=/`;
-          document.cookie = `${"utm_source" +
-            "="}${utm_source};expires=${expiry};domain=${domain};path=/`;
-          document.cookie = `${"utm_campaign" +
-            "="}${utm_campaign};expires=${expiry};domain=${domain};path=/`;
-          return `&utm_medium=${utm_medium}&utm_source=${utm_source}&utm_campaign=${utm_campaign}&referrer=${referrer}` + (dlParam ? `&dl=${dlParam}`: "")  ;
-        }
-        sessionStorage.removeItem("utm_medium");
-        sessionStorage.removeItem("utm_source");
-        sessionStorage.removeItem("utm_campaign");
-        return (dlParam ? `&dl=${dlParam}`: "") ;
-      }
-      window.utmParamsStr = getUtms();
-      function ULID() {
-        const BASE32 = [
-          "0",
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "A",
-          "B",
-          "C",
-          "D",
-          "E",
-          "F",
-          "G",
-          "H",
-          "J",
-          "K",
-          "M",
-          "N",
-          "P",
-          "Q",
-          "R",
-          "S",
-          "T",
-          "V",
-          "W",
-          "X",
-          "Y",
-          "Z",
-        ];
-        let last = -1;
-        /* Pre-allocate work buffers / views */
-        const ulid = new Uint8Array(16);
-        const time = new DataView(ulid.buffer, 0, 6);
-        const rand = new Uint8Array(ulid.buffer, 6, 10);
-        const dest = new Array(26);
+      <form action="no-js" method="get" id="unblocker-form">
+        <p>
+          URL: 
+          <input type="text" id="url" name="url" autofocus="autofocus" />
+          <input type="submit" value="Go" />
+        </p>
 
-        function encode(ulid) {
-          dest[0] = BASE32[ulid[0] >> 5];
-          dest[1] = BASE32[(ulid[0] >> 0) & 0x1f];
-          for (let i = 0; i < 3; i++) {
-            dest[i * 8 + 2] = BASE32[ulid[i * 5 + 1] >> 3];
-            dest[i * 8 + 3] =
-              BASE32[
-                ((ulid[i * 5 + 1] << 2) | (ulid[i * 5 + 2] >> 6)) & 0x1f
-              ];
-            dest[i * 8 + 4] = BASE32[(ulid[i * 5 + 2] >> 1) & 0x1f];
-            dest[i * 8 + 5] =
-              BASE32[
-                ((ulid[i * 5 + 2] << 4) | (ulid[i * 5 + 3] >> 4)) & 0x1f
-              ];
-            dest[i * 8 + 6] =
-              BASE32[
-                ((ulid[i * 5 + 3] << 1) | (ulid[i * 5 + 4] >> 7)) & 0x1f
-              ];
-            dest[i * 8 + 7] = BASE32[(ulid[i * 5 + 4] >> 2) & 0x1f];
-            dest[i * 8 + 8] =
-              BASE32[
-                ((ulid[i * 5 + 4] << 3) | (ulid[i * 5 + 5] >> 5)) & 0x1f
-              ];
-            dest[i * 8 + 9] = BASE32[(ulid[i * 5 + 5] >> 0) & 0x1f];
-          }
-          return dest.join("");
-        }
+      </form>
+      
+<div id="google-ad">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Nodeunblocker.com -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-9477050254721722"
+     data-ad-slot="3464697570"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+      
+      <h3>About Node Unblocker</h3>
+      <p>Node Unblocker is a web proxy, similar to CGIProxy, PHProxy, or Glype, that allows users to evade filters and censorship and access blocked websites. </p>
+      <p>It's designed to be extremely fast and compatible: It processes the data on-the-fly rather than buffering the entire response, and it only modifies URLs when necessary - relative ones will "just work". </p>
+      <p>Node Unblocker is written in JavaScript with <a href="http://nodejs.org">node.js</a>. The source code is <a href="https://github.com/nfriedly/node-unblocker">available on github</a>.</p>
 
-        return function() {
-          const now = Date.now();
-          if (now === last) {
-            /* 80-bit overflow is so incredibly unlikely that it's not
-             * considered as a possiblity here.
-             */
-            for (let i = 9; i >= 0; i--) if (rand[i]++ < 255) break;
-          } else {
-            last = now;
-            time.setUint16(0, (now / 4294967296.0) | 0);
-            time.setUint32(2, now | 0);
-            window.crypto.getRandomValues(rand);
-          }
-          return encode(ulid);
-        };
-      }
-      // make campaign data request as soon as possible.
-      const appCampaignData = (function() {
-        const storageData = sessionStorage.getItem("campaignData");
-        return storageData ? JSON.parse(storageData) : {};
-      })();
-
-      const authToken = sessionStorage.getItem("userToken");
-      window.appInfo = Object.assign({"appId":"5349","media":{"desktop":{"video":"https://cdn.now.gg/apps-content/com.roblox.client/videos/desktop/roblox.mp4","logo":"https://cdn.now.gg/apps-content/com.roblox.client/logo/roblox.png","icon":"https://cdn.now.gg/apps-content/com.roblox.client/icon/roblox.png","gameTile":"https://cdn.now.gg/apps-content/com.roblox.client/game-tiles/roblox.jpg","ogimage":"https://cdn.now.gg/apps-content/com.roblox.client/ogimage/roblox.jpg","launchVideo":"https://cdn.now.gg/apps-content/com.roblox.client/launch-video/desktop/roblox.mp4","buttonLogo":"https://cdn.now.gg/apps-content/com.roblox.client/button-logo/roblox.png","banner":"https://cdn.now.gg/apps-content/com.roblox.client/banner/desktop/roblox.jpg"},"mobile":{"buttonLogo":"https://cdn.now.gg/apps-content/com.roblox.client/button-logo/roblox.png","icon":"https://cdn.now.gg/apps-content/com.roblox.client/icon/roblox.png","banner":"https://cdn.now.gg/apps-content/com.roblox.client/banner/mobile/roblox.jpg","gameTile":"https://cdn.now.gg/apps-content/com.roblox.client/game-tiles/roblox.jpg","ogimage":"https://cdn.now.gg/apps-content/com.roblox.client/ogimage/roblox.jpg","launchVideo":"https://cdn.now.gg/apps-content/com.roblox.client/launch-video/mobile/roblox.mp4","logo":"https://cdn.now.gg/apps-content/com.roblox.client/logo/roblox.png","video":"https://cdn.now.gg/apps-content/com.roblox.client/videos/mobile/roblox.mp4"}},"name":"Roblox","appPageUrl":"https://now.gg/apps/roblox-corporation/5349/roblox.html","gameName":"Roblox"});
-      window.gameId = window.appInfo.appId;
-      window.gameName = window.appInfo.gameName;
-      const whiteLabelledApps = ["8480", "2103", "2026"];
-      window.isWhiteLabelledApp = whiteLabelledApps.indexOf(window.gameId) !== -1;
-      const params = window.location.pathname.split("/");
-      const playerRoute = "/play";
-      let routIndex = 0;
-      if (playerRoute || playerRoute === "") {
-        routIndex = (playerRoute.match(/\//g) || []).length;
-      }
-      window.id = params[2 + routIndex];
-      if (window.id) {
-        window.playUrl = true;
-      }
-      if (
-        window.gameId &&
-        !(appCampaignData && appCampaignData.appId === window.gameId && authToken)
-      ) {
-        const searchParams = new URLSearchParams(window.location.search);
-        const token = searchParams.get("token");
-        const recaptchaToken = searchParams.get("recaptchaToken");
-
-        const host = "" || "";
-        let url = `${host}/api/user/v2/auth?locale=${window.language}`;
-        const sessionId = sessionStorage.getItem("sessionId");
-        let userUuid;
-        const userSessionId = searchParams.get(
-          "sessionId"
-        );
-        if (!userSessionId && !sessionId) {
-          userUuid = ULID()();
-        } else {
-          if (userSessionId) {
-            sessionStorage.removeItem("sessionId")
-          }
-          userUuid = userSessionId || sessionId;
-        }
-        window.isIpad = !!(navigator.maxTouchPoints && navigator.maxTouchPoints > 2 && /MacIntel/.test(navigator.platform))
-
-        const data = {
-          appId: window.gameId,
-          token,
-          sessionId: userUuid,
-          recaptchaToken
-        };
-        url += window.utmParamsStr;
-        if(window.isIpad) {
-          data.forceDeviceType = "ipad";
-        }
-
-        window.sessionId = userUuid;
-        window[`${window.gameId}-auth`] = fetch(url, {
-          method: "Post",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data),
-        });
-      }
-      // Check that service workers are supported
-      const isLocalhost = Boolean(
-        window.location.hostname === "localhost" ||
-          // [::1] is the IPv6 localhost address.
-          window.location.hostname === "[::1]" ||
-          // 127.0.0.1/8 is considered localhost for IPv4.
-          window.location.hostname.match(
-            /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
-          )
-      );
-
-      if ("serviceWorker" in navigator) {
-        // Use the window load event to keep the page load performant
-        window.addEventListener("load", () => {
-          if (!isLocalhost) {
-            navigator.serviceWorker.register(
-              `/sw.js`
-            )
-            .then(() => console.log("serviceWorker successfully registered "))
-            .catch(err => console.error(err));
-          }
-        });
-      }
-      window.ULID = ULID;</script><script>window.wasmReady=new Promise((e,n)=>{if(window.isWasmSupported=(()=>{try{if("function"!=typeof SharedArrayBuffer||"object"!=typeof Atomics)return!1;if("object"==typeof WebAssembly&&"function"==typeof WebAssembly.instantiate){const e=new WebAssembly.Module(Uint8Array.of(0,97,115,109,1,0,0,0));if(e instanceof WebAssembly.Module)return new WebAssembly.Instance(e)instanceof WebAssembly.Instance}}catch(e){return!1}return!1})()&&!("ontouchstart"in document.documentElement),console.log("isWasmSupported",window.isWasmSupported),window.isWasmSupported){const o=document.createElement("script");o.type="application/javascript",o.src="/play/imap.js",o.defer=!0,document.head.appendChild(o),o.onload=()=>{window.Module.onRuntimeInitialized=function(){console.log("wasm loaded"),e(!0)}},o.onerror=()=>{n(new Error("Cannot load imap script."))}}else n(new Error("Wasm is not supported."))})</script><link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin/><link rel="preconnect" href="https://api.now.gg" crossorigin/><link rel="preload" as="style" crossorigin="anonymous" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap"/><script>window.dataLayer=window.dataLayer||[],window.dataLayer.push({"gtm.start":(new Date).getTime(),event:"gtm.js"})</script><script async src="https://www.googletagmanager.com/gtm.js?id=GTM-PRM8BWR"></script><meta property="og:locale" content="en_US" /><meta property="og:title" content="Roblox" /><meta property="og:description" content="Play instantly in browser with now.gg" /><meta property="og:url" content="https://www.roblox.com/" /><meta property="og:site_name" content="https://www.roblox.com/" /><meta property="og:image" itemprop="image" content="https://cdn.now.gg/apps-content/com.roblox.client/ogimage/roblox.jpg" /><meta property="og:image:secure_url" itemprop="image" content="https://cdn.now.gg/apps-content/com.roblox.client/ogimage/roblox.jpg" /><meta property="og:image:width" content="1482" /><meta property="og:image:height" content="486" /><meta property="og:image:type" content="image/jpeg" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="Roblox" /><meta name="twitter:description" content="Play instantly in browser with now.gg" /><meta name="twitter:image" content="https://cdn.now.gg/apps-content/com.roblox.client/ogimage/roblox.jpg" /><title>Play Roblox Online™</title><meta name="apple-mobile-web-app-title" content="Roblox"/><link rel="apple-touch-icon" href="https://cdn.now.gg/apps-content/com.roblox.client/pwa/Icon_192.png"><meta name="description" content="Play Roblox android game in the browser on your PC or mobile. No download required." /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,shrink-to-fit=no,maximum-scale=1,user-scalable=no"/><meta name="theme-color" content="#000000"/><meta name="mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="black"/><meta name="robots" content="noindex"/><style>body,html{padding:0;margin:0}.gamePlayScreen{display:none}.app{width:100vw;height:100vh;background:linear-gradient(173.36deg,#121429 4.69%,#292c4a 94.27%);box-shadow:0 12px 20px rgba(0,0,0,.4);color:#fff}#arrowDown,#backbutton-mob,#loader,#networkOverlay,.backbutton,.copied-tooltip,.landingScreen,.logoImageContainer,.mobile-menu,.nerd-mode-data,.stickyDownloadBtn,.top-action,.video-modal{display:none}.nowggLogo{background-position:-749px -142px;height:37px}.game-info-modal-content{position:fixed;top:0;left:0;width:100%;height:100%;padding:4rem 0;overflow:scroll}@media only screen and (max-height:480px){.game-info-modal-content{overflow-x:hidden}}@media only screen and (max-width:900px),(max-height:510px){.game-info-modal-content{padding:0}}@media only screen and (max-height:480px) and (orientation:landscape){.game-info-modal-content .startingScreen{position:relative;top:50%;left:0;transform:translateY(-50%);margin:0;height:100%;width:100%;max-width:unset;-webkit-backdrop-filter:unset;backdrop-filter:unset;background:unset}}.game-info-bg-image{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden}.game-info-bg-image *{position:absolute;top:0;left:0;display:block;width:100vw;height:100vh}.game-info-bg-image img{object-fit:cover}.game-info-bg-image .game-info-modal-shadow{background:linear-gradient(269.97deg,rgba(255,255,255,.0001) .02%,rgba(0,0,0,.55) 53.64%,rgba(0,0,0,.95) 99.98%)}@media only screen and (max-width:900px),(max-height:510px){.game-info-bg-image .game-info-modal-shadow{background:linear-gradient(202.44deg,rgba(0,0,0,.0001),rgba(0,0,0,.95) 54.89%)}}.startingScreen{position:relative;top:50%;left:0;transform:translate(0,-50%);background:linear-gradient(180deg,rgba(255,255,255,.2) 0,rgba(255,255,255,0) 100%);backdrop-filter:blur(24px);border-radius:.8rem;width:90%;margin-left:8vw;max-width:48rem;overflow:hidden;padding:4rem}@media only screen and (max-height:710px){.startingScreen{top:unset;transform:unset}}@media only screen and (max-width:600px){.startingScreen{margin:0;left:50%;transform:translate(-50%,-50%)}.bluestacks-logo{position:fixed;top:0;left:2.4rem}}@media only screen and (max-height:710px) and (max-width:600px){.startingScreen{transform:translateX(-50%)}}@media only screen and (max-width:600px){.startingScreen{position:absolute;bottom:0;left:0;right:unset;top:unset;transform:unset;width:100%;border-radius:0;background:unset;backdrop-filter:unset}.bluestacks-logo{position:fixed;top:0;left:2.4rem}}.startingScreen.mobile{padding:4rem 4rem 3rem}.startingScreen.mobile .game-info-game-name{margin-top:.8rem}.startingScreen.mobile .horizontal-separator{margin-top:1.6rem;margin-bottom:1.6rem}.startingScreen.mobile .game-info-game-content{display:flex;flex-direction:column;align-items:center;text-align:center}.startingScreen.mobile .game-info-game-content .game-info-game-about{justify-content:center}.startingScreen.progressBar{padding:4rem 4rem 0}.launchButtonsSection{margin-top:4.2rem}.launchButtonsSection a,.launchButtonsSection button{width:calc(100% + 10px);background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.08);border-radius:12px;margin-top:2.4rem;font-weight:600;font-size:17px;margin-left:-.5rem;margin-right:-.5rem;padding:1.2rem;color:#0b0223}@media only screen and (max-width:374px){.launchButtonsSection a,.launchButtonsSection button{font-size:16px}}.launchButtonsSection img{height:4.8rem;width:auto;margin-right:1.6rem}.downloadBar{padding:1.2rem;background:#fff;margin:0 -4rem}@media only screen and (max-height:480px) and (orientation:landscape){.downloadBar{width:100vw}.bluestacks-logo{position:fixed;top:1.9rem;left:1.6rem;margin:0}}.downloadBar .gameIcon{width:40px;margin-right:1.6rem;border-radius:8px}.downloadBar .installText{font-weight:600;font-size:14px;color:#0b0223;margin-bottom:.4rem}.downloadBar .gameName{color:#0b0223;opacity:.6;font-size:12px}.downloadBar .iconContainer{height:3.8rem;width:auto}.downloadBar .iconContainer img{height:100%;width:auto}.game-info-game-icon{width:12.8rem}@media only screen and (max-width:768px){.game-info-game-icon{width:11.2rem}}.game-info-game-icon img{display:block;width:100%;height:auto;border-radius:.8rem}.game-info-container .game-info-game-name{margin-top:2.4rem;font-weight:700;font-size:3.6rem;line-height:1.2;color:#fff}.game-info-container .game-info-game-about{margin-top:.8rem;font-size:1.8rem;line-height:2.7rem;color:rgba(255,255,255,.6);display:flex;align-items:center}.game-info-container .game-info-game-about *{display:block}.game-info-container .game-info-game-about .separator{display:inline-block;padding:.7rem 0;margin:0 1rem 0 .8rem;border-left:1px solid rgba(255,255,255,.6);opacity:.6;max-height:2rem}.horizontal-separator{margin:2.4rem 0;padding:.1rem 0 0;background:linear-gradient(90deg,rgba(255,255,255,.4) 0,rgba(255,255,255,0) 100%);opacity:.2;border:0}.setting-up-text{font-weight:700;font-size:1.4rem;line-height:2.1rem;color:#fff}.progress-bar{margin:1.2rem 0;width:100%;background:rgba(0,0,0,.4);border-radius:.8rem}.progress-bar .progress{background:#ff43a6;border-radius:.8rem;padding:.4rem 0;transition:ease-in-out 1s all;width:5%}.progress-bar-text{font-size:1.3rem;line-height:1.9rem;color:#fff;opacity:.6;margin-bottom:1.2rem}.game-info-game-information{width:100%}@media only screen and (max-height:480px) and (orientation:landscape){.game-info-modal-shadow{background:linear-gradient(270deg,rgba(0,0,0,.0001) 0,rgba(0,0,0,.9) 86.83%)!important}.startingScreen{position:relative;top:50%;left:0;transform:translateY(-50%);margin:0;height:100%;width:100%;max-width:unset;backdrop-filter:unset;background:unset}.startingScreen.progressBar .game-info-container{bottom:0}.game-info-container{position:absolute;bottom:1rem;width:calc(100% - 8rem)}.game-info-container .bluestacks-logo{position:fixed;top:1.9rem;left:1.6rem;margin:0}.game-info-game-content{display:flex;align-items:center}.game-info-game-content .game-info-game-icon{width:7.2rem;min-width:7.2rem}.game-info-game-information{display:block;margin-left:.8rem}.game-info-game-information .game-info-game-name{margin-top:0;font-size:2.4rem}}.bluestacks-logo{margin-top:2.4rem;width:100%;max-width:15.4rem}.bluestacks-logo img{display:block;width:100%;height:auto}</style></head><body><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PRM8BWR" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><noscript>You need to enable JavaScript to run this app.</noscript><div class="app"><div class="snackbar"></div><div id="loader"><img class="loaderImage" alt="loaderImg" src="/play/images/loader.svg"/></div><div class="no-pointer-event gamePlayScreen"><div class="player-container"><div class="game-play"><div id="player" class="player-container"><div id="userActions"></div><div id="bgAdsVideoContainer"><div class="videoLoadingContainer"><div id="video-container"><div class="adLoader"><p class="adsText"></p><video id="video-element" controls playsinline autoplay muted><source src="https://storage.googleapis.com/interactive-media-ads/media/android.mp4"><source src="https://storage.googleapis.com/interactive-media-ads/media/android.webm"></video><div id="ad-container"></div></div></div></div><div class="video-footer"><div class="video-footer-img"><img src="#" id="footer-img" alt=""></div><div class="video-footer-progress"><p><span data-str-id="loading2" style="font-weight:600"></span> &nbsp; <span id="gameName"></span></p><p id="prog-percentage">0%</p><div class="progres-bar"><span id="pp-total"></span></div></div><div class="video-footer-action"><button class="video-footer-btn" id="video-footer-btn" data-str-id="launchGame"></button></div></div></div><div class="video-modal"><div class="video-loader"><div class="overlay-container flex wrap"><video oncontextmenu="return!1" disableremoteplayback id="bgVideo" autoplay playsinline muted loop></video></div></div></div><div class="stickyDownloadBtn end"><div class="flex end buttonSection"><img class="buttonLogo" alt="gamelogo"/> <a target="_blank" class="flex vrtlCenter button-download-os-specific-pre button-download-os-specific installNowBtn" rel="noreferrer noopener" data-screentype="gameplay" onclick="deliverStats(event)"><span class="buttonText"></span></a></div></div><div class="video-container _videoContainer"><div class="game-background"></div><div class="overlay-bg"></div><div id="overlay"></div><video disableremoteplayback id="remoteVideo" autoplay playsinline muted oncontextmenu="return!1"></video><div id="nerdStats"></div><div id="sidebar" class="sidebar"></div></div><div id="back"></div></div><div id="screen"></div></div></div></div></div><a class="logoImageContainer mobileView" target="_blank"><img class="logoImage" alt="logoImage" src="/play/images/logo-1-a.png"/> </a><a class="logoImageContainer desktopView" target="_blank"><img class="logoImage" alt="logoImage" src="/play/images/nowggdesktopLogo.png"/></a><div id="modal"></div><div id="networkOverlay"><div class="internet-error"><p class="connected" data-str-id="connected"></p><p class="disconnectText"><span data-str-id="networkLost" class="bold"></span>&nbsp;<span data-str-id="tryingToReconnect"></span></p></div></div><link crossorigin="anonymous" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap"/><link href="/play/vendors~app.78eb0262.chunk.css" rel="stylesheet"><link href="/play/app.095aaa01.css" rel="stylesheet"><script src="/play/vendors~app.12c38a4d.chunk.js"></script><script src="/play/app.53bd85f1.js"></script><script>const favIcon = window.isWhiteLabelledApp ? "nutaku_favicon.ico" : "favicon.ico";
-      const link = document.createElement('link');
-      link.rel = 'icon';
-      document.getElementsByTagName('head')[0].appendChild(link);
-      link.href = `/play/images/${favIcon}`;
-      if (window.appInfo?.appPageUrl) {
-        document.querySelectorAll(".logoImageContainer").forEach(e => {
-          e.href = window.appInfo?.appPageUrl || "";
-        });
-      }</script></body></html>
+    </div>
+    
+    <div class="footer">
+      <p><a href="https://github.com/nfriedly/node-unblocker">Node Unblocker</a> by <a href="http://www.nfriedly.com/" title="Node.js developer and JavaScript Expert">Nathan Friedly</a></p>
+    </div>
+  
+  </div>
+	<script>
+		function $(id){
+			return document.getElementById(id);
+		}
+		
+		$('unblocker-form').onsubmit = function(){
+			var url = $('url').value;
+			if(url.substr(0,4) != "http"){
+				url = "http://" + url;
+			}
+			window.location.pathname = 'proxy/' + url;
+			return false;
+		};
+		
+		function checkError(){
+			var search = window.location.search;
+			var start = search.indexOf('error=');
+			if(start > -1){
+				var stop = search.indexOf('&', start);
+				if(stop == -1){ stop = undefined; }
+				// +6 for "error="
+				var err = search.substr(start+6, stop);
+                var $error = $('error');
+				$error.innerText = $error.textContent = decodeURIComponent(err);
+				$error.style.display = "block";
+			}
+		}
+    
+		window.onload = function() { 
+			$('url').focus(); 
+			checkError(); 
+		}
+	</script>
+  
+  
+</body>
+</html>
