@@ -1,0 +1,26 @@
+pcall
+getfield
+boolean
+tolstring
+toboolean
+pushvalue
+pushnumber
+pushstring
+lua_next
+tonumber
+createtable
+newthread
+newuserdata
+lua_rawgeti
+lua_getmetatable
+touserdata
+lua_type
+lua_settable
+luaL_ref
+pushlightuserdata
+lua_pushcclosure
+lua_settop
+lua_gettop
+lua_pushnil
+
+--List Updated 12/7/21 7:35 PM Est
