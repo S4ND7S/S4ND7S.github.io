@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>How To Make Basic Roblox Dlls</h1>
+<PRE>
+  
+  
+  
+  </PRE>
+  <p1>PRINT EXECUTOR</p1>
+  
+  
+<PRE>
+  
+#define _CRT_SECURE_NO_WARNINGS
+#include <Windows.h>
+#include <string>
+#include <iostream>
+
+#define aslr(address) address - 0x400000 + (DWORD)GetModuleHandle(NULL)
+
+#define print_msg 0
+#define error_msg 3
+#define warn_msg 2
+#define info_msg 1
+
+typedef int(__cdecl* aprint)(int a1, const char* a2);
+aprint print = (aprint)(aslr(0x74C930));//This is the print address
+
+void main() {
+    // create the console \/
+    DWORD protection;
+    VirtualProtect(FreeConsole, 1, PAGE_EXECUTE_READWRITE, &protection);
+    *(BYTE*)(&FreeConsole) = 0xC3;
+    AllocConsole();
+    freopen("CONIN$", "r", stdin);
+    freopen("CONOUT$", "w", stdout);
+    SetWindowPos(GetConsoleWindow(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_DRAWFRAME);
+    SetConsoleTitleA("Sandy - Print Tutorial");
+    // create the console ^
+
+    while (true) {
+        printf("Print Msg >");
+        std::string input;
+        std::getline(std::cin, input);
+        print(print_msg, input.c_str());
+        print(error_msg, input.c_str());//put // infront of this if u dont want to print error
+        print(warn_msg, input.c_str());//put // infront of this if u dont want to print warn
+        print(info_msg, input.c_str());//put // infront of this if u dont want to print info
+    }
+}
+
+BOOL APIENTRY DllMain(HMODULE hModule,
+    DWORD  ul_reason_for_call,
+    LPVOID lpReserved
+)
+{
+    switch (ul_reason_for_call)
+    {
+    case DLL_PROCESS_ATTACH:
+        CreateThread(0, 0, (LPTHREAD_START_ROUTINE)main, 0, 0, 0);
+    case DLL_THREAD_ATTACH:
+    case DLL_THREAD_DETACH:
+    case DLL_PROCESS_DETACH:
+        break;
+    }
+    return TRUE;
+}
+  </PRE>
+  
+  
+
+</body>
+</html>
