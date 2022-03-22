@@ -27,8 +27,8 @@
 <ul>
 <li><a href="#metatables-tutorial">Metatables Tutorial</a>
 <ul>
-<li><a href="#introduction">Introduction</a></li>
-<li><a href="#main">Main</a></li>
+<li><a href="#dllmain">DLLMain.cpp</a></li>
+<li><a href="#communication">Communication.cpp</a></li>
 <li><a href="#addresses">Addresses</a></li>
 <li><a href="#ui">UI</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
@@ -40,13 +40,13 @@
   </div>
   <div class="stackedit__right">
     <div class="stackedit__html">
-      <h1 id="metatables-tutorial">Metatables Tutorial</h1>
+      <h1 id="metatables-tutorial">Roblox lua Dll Tutorial</h1>
 <p>Written by Sandy</p>
 <h2 id="introduction">Introduction</h2>
-<p>Let’s start by defining some terms:</p>
+<p>Let’s start by creating the main part of the dll:</p>
 <ul>
 </ul>
-<p>For the main part of your dll (dllmain.cpp) you dont really need much. Here's an example: <code><PRE>
+<p>For the main part of your dll (dllmain.cpp) you dont really need much. Here's an example: <code><pre class=" language-c++">
 void mainfunc()
 {
 	execution.hook_waiting_scripts_job(); //hooks the waiting scripts job
