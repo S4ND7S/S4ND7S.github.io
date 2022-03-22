@@ -28,14 +28,9 @@
 <li><a href="#metatables-tutorial">Metatables Tutorial</a>
 <ul>
 <li><a href="#introduction">Introduction</a></li>
-<li><a href="#index">__index</a></li>
-<li><a href="#newindex">__newindex</a></li>
-<li><a href="#call">__call</a></li>
-<li><a href="#concat">__concat</a></li>
-<li><a href="#len">__len</a></li>
-<li><a href="#metatable">__metatable</a></li>
-<li><a href="#arithmetic-metamethods">Arithmetic Metamethods</a></li>
-<li><a href="#relational-metamethods">Relational Metamethods</a></li>
+<li><a href="#main">Main</a></li>
+<li><a href="#addresses">Addresses</a></li>
+<li><a href="#ui">UI</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
 </ul>
 </li>
@@ -46,14 +41,39 @@
   <div class="stackedit__right">
     <div class="stackedit__html">
       <h1 id="metatables-tutorial">Metatables Tutorial</h1>
-<p>Written by Greenman</p>
+<p>Written by Sandy</p>
 <h2 id="introduction">Introduction</h2>
 <p>Let’s start by defining some terms:</p>
 <ul>
-<li>metatable (n) - a table attached to another table containing metamethods</li>
+/*<li>metatable (n) - a table attached to another table containing metamethods</li>
 <li>metamethod (n) - a function with a specific name that modifies or defines the behavior of certain aspects of a table</li>
+*/
 </ul>
-<p>Metamethods always have two underscores <code>__</code> in their name and the name of the metamethod tells you what it does.</p>
+<p>For the main part of your dll (dllmain.cpp) you dont really need much. Here's an example: <code>
+void mainfunc()
+{
+	execution.hook_waiting_scripts_job(); //hooks the waiting scripts job
+	
+	execution.set_identity(7); //(7) is the level u want the executor to display
+	
+	while (true)
+    {
+        execution.run_script(communication.read_pipe()); //reads the pipe from the ui and execute the textbox's script
+    }
+}	
+BOOL APIENTRY DllMain(HMODULE hModule,
+    DWORD  ul_reason_for_call,
+    LPVOID lpReserved
+)
+{
+    switch (ul_reason_for_call)
+    {
+    case DLL_PROCESS_ATTACH:
+        std::thread(mainfunc).detach();
+        break;
+    }
+    return TRUE;
+}</code>This allows the dll to be injected into a process, sets the dll identity to 7, and hooks waiting jobs.</p>
 <p>Let’s start by setting up a metatable:</p>
 <pre class=" language-lua"><code class="prism  language-lua"><span class="token keyword">local</span> t <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">,</span> <span class="token number">30</span><span class="token punctuation">}</span>
 <span class="token keyword">local</span> mt <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
