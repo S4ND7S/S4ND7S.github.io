@@ -71,7 +71,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
     }
     return TRUE;
 }</code></PRE>
-	This allows the dll to be injected into a process, sets the dll identity to 7, and hooks waiting jobs.</p>
+	This allows the dll to be injected into a process (roblox), sets the dll identity to 7, hooks waiting jobs, and executes scripts from the ui</p>
 <p>Let’s start by setting up a metatable:</p>
 <pre class=" language-lua"><code class="prism  language-lua"><span class="token keyword">local</span> t <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">,</span> <span class="token number">30</span><span class="token punctuation">}</span>
 <span class="token keyword">local</span> mt <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
