@@ -46,7 +46,7 @@
 <p>Let’s start by defining some terms:</p>
 <ul>
 </ul>
-<p>For the main part of your dll (dllmain.cpp) you dont really need much. Here's an example: <PRE>
+<p>For the main part of your dll (dllmain.cpp) you dont really need much. Here's an example: <code><PRE>
 void mainfunc()
 {
 	execution.hook_waiting_scripts_job(); //hooks the waiting scripts job
@@ -70,7 +70,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
         break;
     }
     return TRUE;
-}</PRE>
+}</code></PRE>
 	This allows the dll to be injected into a process, sets the dll identity to 7, and hooks waiting jobs.</p>
 <p>Let’s start by setting up a metatable:</p>
 <pre class=" language-lua"><code class="prism  language-lua"><span class="token keyword">local</span> t <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">,</span> <span class="token number">30</span><span class="token punctuation">}</span>
