@@ -1,0 +1,10 @@
+else
+{
+await task.delay(2000)
+label1.text = ("checking Version");
+if (Bunifuwebclient1.downloadstring("https://sandyss.com/Version.txt").Contains("Version-Old"))
+{
+ Label1.text = ("You Aren't Running The Latest Version Of Lunar!");
+ await task.delay(2000);
+ application.exit();
+}
